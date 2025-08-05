@@ -32,7 +32,7 @@ class GitHubProjectsManager {
             const data = await response.json();
             
             if (data.success) {
-                this.renderProjects(data.projects);
+                this.renderProjects(data.projects, data.count);
                 this.lastUpdate = data.last_updated;
                 this.hideLoadingState();
                 console.log('Projetos carregados com sucesso:', data.count, 'projetos');
@@ -57,7 +57,7 @@ class GitHubProjectsManager {
             
             if (data.success && data.last_updated !== this.lastUpdate) {
                 console.log('Novos projetos detectados, atualizando...');
-                this.renderProjects(data.projects);
+                this.renderProjects(data.projects, data.count);
                 this.lastUpdate = data.last_updated;
                 this.showUpdateNotification();
             }
@@ -66,11 +66,16 @@ class GitHubProjectsManager {
         }
     }
     
-    renderProjects(projects) {
+    renderProjects(projects, totalCount = null) {
         if (!this.projectsContainer) return;
         
         const projectsHTML = projects.map(project => this.createProjectCard(project)).join('');
         this.projectsContainer.innerHTML = projectsHTML;
+        
+        // Atualizar contador de projetos na hero section
+        // Usar totalCount se fornecido, senão usar projects.length
+        const countToShow = totalCount !== null ? totalCount : projects.length;
+        this.updateProjectCount(countToShow);
         
         // Adicionar animações aos novos cards
         setTimeout(() => {
@@ -81,6 +86,18 @@ class GitHubProjectsManager {
                 }, index * 100);
             });
         }, 100);
+    }
+    
+    updateProjectCount(count) {
+        const projectCountElement = document.getElementById('projectCount');
+        
+        if (projectCountElement) {
+            // Atualizar diretamente sem animação
+            projectCountElement.textContent = count;
+            console.log('Contador atualizado para:', count);
+        } else {
+            console.error('projectCount element not found!');
+        }
     }
     
     createProjectCard(project) {

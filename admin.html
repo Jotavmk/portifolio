@@ -33,6 +33,7 @@
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
         }
         
         .admin-header h1 {
@@ -44,6 +45,83 @@
         .admin-header p {
             font-size: 1.1rem;
             opacity: 0.9;
+        }
+        
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-info span {
+            color: white;
+            font-size: 14px;
+        }
+        
+        .btn-logout {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-logout:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+        
+        .login-required {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 100px auto;
+        }
+        
+        .login-required h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .login-required p {
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .btn-login-redirect {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-login-redirect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
         }
         
         .admin-content {
@@ -299,8 +377,22 @@
     </style>
 </head>
 <body>
-    <div class="admin-container">
+    <div class="login-required" id="loginRequired">
+        <h2><i class="fas fa-lock"></i> Acesso Restrito</h2>
+        <p>Você precisa fazer login para acessar o painel administrativo.</p>
+        <a href="admin_login.html" class="btn-login-redirect">
+            <i class="fas fa-sign-in-alt"></i> Fazer Login
+        </a>
+    </div>
+    
+    <div class="admin-container" id="adminContainer" style="display: none;">
         <div class="admin-header">
+            <div class="user-info" id="userInfo" style="display: none;">
+                <span id="userDisplay">Olá, <strong id="usernameDisplay"></strong></span>
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
             <h1><i class="fas fa-shield-alt"></i> Painel Administrativo</h1>
             <p>Gerenciamento do Sistema de Depoimentos - João Victor</p>
         </div>
@@ -364,7 +456,7 @@
                     
                     <div class="form-group">
                         <label for="loginPassword">Senha:</label>
-                        <input type="password" id="loginPassword" value="Jvml#3000990" placeholder="Senha">
+                        <input type="password" id="loginPassword" value="Jvml#300990" placeholder="Senha">
                     </div>
                     
                     <button onclick="testLogin()" class="btn">
@@ -456,7 +548,42 @@
         const API_BASE_URL = '/sitejv/api';
         let currentUser = null;
 
-        // Verificar localStorage
+        // Verificar se usuário está logado
+        function checkLoginStatus() {
+            const userData = localStorage.getItem('sitejv_user');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                if (currentUser && currentUser.username) {
+                    // Usuário logado - mostrar painel admin
+                    document.getElementById('loginRequired').style.display = 'none';
+                    document.getElementById('adminContainer').style.display = 'block';
+                    
+                    // Mostrar informações do usuário
+                    document.getElementById('userInfo').style.display = 'flex';
+                    document.getElementById('usernameDisplay').textContent = currentUser.username;
+                    
+                    // Carregar dados iniciais
+                    refreshStats();
+                    return true;
+                }
+            }
+            
+            // Usuário não logado - mostrar tela de login
+            document.getElementById('loginRequired').style.display = 'block';
+            document.getElementById('adminContainer').style.display = 'none';
+            return false;
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('sitejv_user');
+            currentUser = null;
+            
+            // Redirecionar para página de login
+            window.location.href = 'admin_login.html';
+        }
+
+        // Verificar localStorage (função original mantida para compatibilidade)
         function checkLocalStorage() {
             const userData = localStorage.getItem('sitejv_user');
             if (userData) {
@@ -465,6 +592,11 @@
             }
             return null;
         }
+
+        // Executar verificação de login ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
 
         // Carregar estatísticas
         async function refreshStats() {

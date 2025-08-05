@@ -353,35 +353,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Project count animation
-    const projectCountElement = document.getElementById('projectCount');
-    if (projectCountElement) {
-        const targetCount = 30; // Set your actual GitHub repo count here
-        let currentCount = 0;
-        const increment = targetCount / 50; // Animate over 50 steps
-        
-        const updateCount = () => {
-            if (currentCount < targetCount) {
-                currentCount += increment;
-                projectCountElement.textContent = Math.floor(currentCount);
-                requestAnimationFrame(updateCount);
-            } else {
-                projectCountElement.textContent = targetCount;
-            }
-        };
-        
-        // Start animation when element is visible
-        const countObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    updateCount();
-                    countObserver.unobserve(entry.target);
-                }
-            });
-        });
-        
-        countObserver.observe(projectCountElement);
-    }
+    // Project count will be updated by GitHubProjectsManager
+    // The counter will be animated when projects are loaded from GitHub
     
     // Parallax effect for hero section
     window.addEventListener('scroll', () => {

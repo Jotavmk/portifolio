@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     try {
         // Verificar se o usuário existe
-        $stmt = $pdo->prepare("SELECT id, username, email, password FROM users WHERE username = ?");
+        $stmt = $pdo->prepare("SELECT id, username, email, password, is_admin FROM users WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
         
@@ -53,11 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode([
                 'success' => true,
                 'message' => 'Login realizado com sucesso',
-                'user' => [
-                    'id' => $user['id'],
-                    'username' => $user['username'],
-                    'email' => $user['email']
-                ]
+                'user_id' => $user['id'],
+                'username' => $user['username'],
+                'email' => $user['email'],
+                'is_admin' => (bool)$user['is_admin']
             ]);
         } else {
             echo json_encode([

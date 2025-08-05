@@ -113,7 +113,13 @@ function getDemoUrl($projectName) {
         'mostruario_de_carros_django' => 'https://mostruario-de-carros-django.vercel.app',
         'mostruario-de-carros-django' => 'https://mostruario-de-carros-django.vercel.app',
         'loja_de_veiculos_js' => null, // Sem demo
-        'loja-de-veiculos-js' => null // Sem demo
+        'loja-de-veiculos-js' => null, // Sem demo
+        'sitejv' => 'https://sitejv.vercel.app',
+        'site-jv' => 'https://sitejv.vercel.app',
+        'joao-victor-portfolio' => 'https://joao-victor-portfolio.vercel.app',
+        'joao_victor_portfolio' => 'https://joao-victor-portfolio.vercel.app',
+        'joao-victor' => 'https://joao-victor.vercel.app',
+        'joao_victor' => 'https://joao-victor.vercel.app'
     ];
     
     // Debug: log para verificar se o projeto está sendo encontrado
@@ -144,15 +150,15 @@ try {
             continue;
         }
         
-        // Pular projetos muito antigos ou sem atividade
-        $lastUpdate = new DateTime($project['updated_at']);
-        $now = new DateTime();
-        $diff = $now->diff($lastUpdate);
+        // Incluir todos os projetos (removido filtro de idade)
+        // $lastUpdate = new DateTime($project['updated_at']);
+        // $now = new DateTime();
+        // $diff = $now->diff($lastUpdate);
         
-        // Pular projetos não atualizados há mais de 2 anos
-        if ($diff->y > 2) {
-            continue;
-        }
+        // Pular projetos não atualizados há mais de 5 anos (aumentado de 2 para 5)
+        // if ($diff->y > 5) {
+        //     continue;
+        // }
         
         $demoUrl = getDemoUrl($project['name']);
         
@@ -181,13 +187,17 @@ try {
         return strtotime($b['updated_at']) - strtotime($a['updated_at']);
     });
     
-    // Limitar a 6 projetos mais recentes
+    // Guardar o total de projetos antes de limitar
+    $totalProjects = count($formattedProjects);
+    
+    // Mostrar apenas os 6 projetos mais recentes
     $formattedProjects = array_slice($formattedProjects, 0, 6);
     
     echo json_encode([
         'success' => true,
         'projects' => $formattedProjects,
-        'count' => count($formattedProjects),
+        'count' => $totalProjects, // Total de todos os projetos
+        'displayed_count' => count($formattedProjects), // Apenas os exibidos
         'last_updated' => date('Y-m-d H:i:s')
     ]);
     
