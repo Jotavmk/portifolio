@@ -1,20 +1,59 @@
+console.log('main.js is loading...'); // Test if script loads
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOMContentLoaded fired'); // Test if DOM is ready
+    
     // Smooth scrolling for navigation links
     const navLinks = document.querySelectorAll('a[href^="#"]');
+    console.log('Found nav links:', navLinks.length); // Debug log
+    
+    // Log each link for debugging
+    navLinks.forEach((link, index) => {
+        console.log(`Link ${index}:`, link.href, link.textContent);
+    });
+    
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
+            console.log('Link clicked:', this.href); // Debug log
             e.preventDefault();
-                        const targetId = this.getAttribute('href');
+            const targetId = this.getAttribute('href');
+            console.log('Clicked link:', targetId); // Debug log
+            if (targetId && targetId.startsWith('#') && targetId.length > 1) {
+                const targetSection = document.querySelector(targetId);
+                console.log('Target section found:', targetSection); // Debug log
+                if (targetSection) {
+                    console.log('Scrolling to:', targetId); // Debug log
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } else {
+                    console.log('Target section not found for:', targetId); // Debug log
+                }
+            }
+            
+        });
+    });
+    
+    // Smooth scrolling for footer navigation links
+    const footerNavLinks = document.querySelectorAll('.footer-bottom-links a[href^="#"]');
+    console.log('Found footer nav links:', footerNavLinks.length); // Debug log
+    
+    footerNavLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            console.log('Footer link clicked:', this.href); // Debug log
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
             if (targetId && targetId.startsWith('#') && targetId.length > 1) {
                 const targetSection = document.querySelector(targetId);
                 if (targetSection) {
+                    console.log('Scrolling to footer target:', targetId); // Debug log
                     targetSection.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
                     });
                 }
             }
-            
         });
     });
     

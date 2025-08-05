@@ -2,7 +2,7 @@
 html {
     width: 100%;
     max-width: 100%;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 }
 
 * {
@@ -71,7 +71,7 @@ body {
     background-color: var(--primary-black);
     color: var(--text-primary);
     line-height: 1.6;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     width: 100%;
     max-width: 100%;
 }
