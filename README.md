@@ -1,4 +1,4 @@
-# Sistema de Comentários - Portfolio João Victor
+Portfolio João Victor
 
 Sistema completo de comentários com autenticação de usuários, desenvolvido em PHP/MySQL e pronto para deploy na Hostinger.
 
