@@ -28,13 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 c.rating,
                 c.message,
                 c.created_at,
+                c.user_id,
                 u.username as user_username
             FROM comments c
             LEFT JOIN users u ON c.user_id = u.id
             ORDER BY c.created_at DESC
-            LIMIT ? OFFSET ?
+            LIMIT $limit OFFSET $offset
         ");
-        $stmt->execute([$limit, $offset]);
+        $stmt->execute();
         $comments = $stmt->fetchAll();
         
         // Contar total de comentários
@@ -55,7 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Erro interno do servidor']);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Erro interno do servidor: ' . $e->getMessage()
+        ]);
     }
 }
 
@@ -80,6 +84,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userId = $_SESSION['user_id'];
         $name = $_SESSION['username'];
         $email = $_SESSION['email'] ?? $email; // Usar email da sessão se disponível
+        
+        error_log("Usuário logado - ID: $userId, Nome: $name, Email: $email");
+    } else {
+        error_log("Usuário não logado - comentário anônimo");
     }
     
     // Validações
@@ -117,15 +125,18 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $commentId = $pdo->lastInsertId();
         
+        error_log("Comentário criado - ID: $commentId, User ID: $userId");
+        
         echo json_encode([
             'success' => true,
             'message' => 'Comentário enviado com sucesso',
-            'comment_id' => $commentId
+            'comment_id' => $commentId,
+            'user_id' => $userId
         ]);
         
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Erro interno do servidor']);
+        echo json_encode(['error' => 'Erro interno do servidor: ' . $e->getMessage()]);
     }
 }
 

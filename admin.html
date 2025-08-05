@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - João Victor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .admin-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .admin-content {
+            padding: 40px;
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .admin-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .admin-card h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-card h3 i {
+            color: #3498db;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+        }
+        
+        .btn-success:hover {
+            background: #229954;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .comments-list {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .comment-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .comment-date {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .comment-text {
+            color: #495057;
+            line-height: 1.5;
+        }
+        
+        .comment-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .admin-footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .admin-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-shield-alt"></i> Painel Administrativo</h1>
+            <p>Gerenciamento do Sistema de Depoimentos - João Victor</p>
+        </div>
+        
+        <div class="admin-content">
+            <!-- Estatísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalUsers">-</span>
+                    <span class="stat-label">Usuários</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalComments">-</span>
+                    <span class="stat-label">Depoimentos</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="adminUsers">-</span>
+                    <span class="stat-label">Administradores</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="activeUsers">-</span>
+                    <span class="stat-label">Usuários Ativos</span>
+                </div>
+            </div>
+            
+            <div class="admin-grid">
+                <!-- Gerenciamento de Usuários -->
+                <div class="admin-card">
+                    <h3><i class="fas fa-users"></i> Gerenciamento de Usuários</h3>
+                    
+                    <div class="form-group">
+                        <label for="createUsername">Usuário:</label>
+                        <input type="text" id="createUsername" placeholder="Nome do usuário">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="createEmail">Email:</label>
+                        <input type="email" id="createEmail" placeholder="email@exemplo.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="createPassword">Senha:</label>
+                        <input type="password" id="createPassword" placeholder="Senha segura">
+                    </div>
+                    
+                    <button onclick="createUser()" class="btn btn-success">
+                        <i class="fas fa-user-plus"></i> Criar Usuário
+                    </button>
+                    
+                    <div id="createResult"></div>
+                </div>
+                
+                <!-- Login de Teste -->
+                <div class="admin-card">
+                    <h3><i class="fas fa-sign-in-alt"></i> Login de Teste</h3>
+                    
+                    <div class="form-group">
+                        <label for="loginUsername">Usuário:</label>
+                        <input type="text" id="loginUsername" value="joao" placeholder="Usuário">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Senha:</label>
+                        <input type="password" id="loginPassword" value="Jvml#3000990" placeholder="Senha">
+                    </div>
+                    
+                    <button onclick="testLogin()" class="btn">
+                        <i class="fas fa-sign-in-alt"></i> Testar Login
+                    </button>
+                    
+                    <div id="loginResult"></div>
+                </div>
+                
+                <!-- Verificação de Admin -->
+                <div class="admin-card">
+                    <h3><i class="fas fa-user-shield"></i> Verificação de Admin</h3>
+                    
+                    <p style="margin-bottom: 15px; color: #6c757d;">
+                        Verifique se um usuário logado tem privilégios de administrador.
+                    </p>
+                    
+                    <button onclick="checkAdminStatus()" class="btn">
+                        <i class="fas fa-check-circle"></i> Verificar Status
+                    </button>
+                    
+                    <div id="adminResult"></div>
+                </div>
+                
+                <!-- Gerenciamento de Depoimentos -->
+                <div class="admin-card">
+                    <h3><i class="fas fa-comments"></i> Gerenciamento de Depoimentos</h3>
+                    
+                    <button onclick="loadAllComments()" class="btn">
+                        <i class="fas fa-list"></i> Carregar Todos
+                    </button>
+                    
+                    <button onclick="testDeleteComment()" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Testar Deletar
+                    </button>
+                    
+                    <div id="deleteResult"></div>
+                </div>
+                
+                <!-- Status do Sistema -->
+                <div class="admin-card">
+                    <h3><i class="fas fa-info-circle"></i> Status do Sistema</h3>
+                    
+                    <button onclick="showCurrentStatus()" class="btn">
+                        <i class="fas fa-eye"></i> Ver Status
+                    </button>
+                    
+                    <button onclick="clearLocalStorage()" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Limpar Cache
+                    </button>
+                    
+                    <div id="statusResult"></div>
+                </div>
+                
+                <!-- Ações Rápidas -->
+                <div class="admin-card">
+                    <h3><i class="fas fa-bolt"></i> Ações Rápidas</h3>
+                    
+                    <button onclick="createJoaoUser()" class="btn btn-success">
+                        <i class="fas fa-user-plus"></i> Criar João (Admin)
+                    </button>
+                    
+                    <button onclick="refreshStats()" class="btn">
+                        <i class="fas fa-sync"></i> Atualizar Estatísticas
+                    </button>
+                    
+                    <div id="quickActionsResult"></div>
+                </div>
+            </div>
+            
+            <!-- Lista de Depoimentos -->
+            <div class="comments-list">
+                <h3><i class="fas fa-list"></i> Lista de Depoimentos</h3>
+                <div id="commentsList">
+                    <p style="text-align: center; color: #6c757d; padding: 20px;">
+                        Clique em "Carregar Todos" para ver os depoimentos
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="admin-footer">
+            <p>&copy; 2024 Painel Administrativo - João Victor Medici Liberato</p>
+            <p><small>Versão 1.0 - Sistema de Gerenciamento de Depoimentos</small></p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/sitejv/api';
+        let currentUser = null;
+
+        // Verificar localStorage
+        function checkLocalStorage() {
+            const userData = localStorage.getItem('sitejv_user');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                return currentUser;
+            }
+            return null;
+        }
+
+        // Carregar estatísticas
+        async function refreshStats() {
+            try {
+                // Carregar comentários
+                const commentsResponse = await fetch(API_BASE_URL + '/comments.php');
+                const commentsData = await commentsResponse.json();
+                
+                if (commentsData.success) {
+                    document.getElementById('totalComments').textContent = commentsData.comments.length;
+                }
+                
+                // Tentar carregar informações de usuários (se disponível)
+                document.getElementById('totalUsers').textContent = 'N/A';
+                document.getElementById('adminUsers').textContent = 'N/A';
+                document.getElementById('activeUsers').textContent = 'N/A';
+                
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+            }
+        }
+
+        // Criar usuário
+        async function createUser() {
+            const username = document.getElementById('createUsername').value;
+            const email = document.getElementById('createEmail').value;
+            const password = document.getElementById('createPassword').value;
+            const resultDiv = document.getElementById('createResult');
+            
+            if (!username || !email || !password) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Preencha todos os campos';
+                return;
+            }
+            
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Criando usuário...';
+            
+            try {
+                const response = await fetch(API_BASE_URL + '/register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Usuário criado com sucesso!\nID: ${data.user_id}\nUsername: ${username}\nEmail: ${email}`;
+                    
+                    // Limpar campos
+                    document.getElementById('createUsername').value = '';
+                    document.getElementById('createEmail').value = '';
+                    document.getElementById('createPassword').value = '';
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erro: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro: ${error.message}`;
+            }
+        }
+
+        // Criar usuário João (Admin)
+        async function createJoaoUser() {
+            const resultDiv = document.getElementById('quickActionsResult');
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Criando usuário João como administrador...';
+            
+            try {
+                const response = await fetch(API_BASE_URL + '/create_joao_user.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ ${data.message}\n\nCredenciais:\n- Usuário: ${data.credentials.username}\n- Email: ${data.credentials.email}\n- Senha: ${data.credentials.password}\n- Admin: ${data.credentials.is_admin ? 'Sim' : 'Não'}`;
+                } else {
+                    resultDiv.className = 'result warning';
+                    resultDiv.textContent = `⚠️ ${data.message || data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro: ${error.message}`;
+            }
+        }
+
+        // Testar login
+        async function testLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const resultDiv = document.getElementById('loginResult');
+            
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Fazendo login...';
+            
+            try {
+                const response = await fetch(API_BASE_URL + '/login_simple.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    localStorage.setItem('sitejv_user', JSON.stringify(data.user));
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Login realizado com sucesso!\n\nUsuário: ${JSON.stringify(data.user, null, 2)}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erro no login: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro: ${error.message}`;
+            }
+        }
+
+        // Verificar status de admin
+        async function checkAdminStatus() {
+            const user = checkLocalStorage();
+            const resultDiv = document.getElementById('adminResult');
+            
+            if (!user) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Nenhum usuário logado';
+                return;
+            }
+            
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Verificando status de admin...';
+            
+            try {
+                const response = await fetch(API_BASE_URL + '/check_admin.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: user.id })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = data.is_admin ? 'result success' : 'result warning';
+                    resultDiv.textContent = `${data.is_admin ? '✅' : '⚠️'} ${data.message}\nAdmin: ${data.is_admin ? 'Sim' : 'Não'}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erro: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro: ${error.message}`;
+            }
+        }
+
+        // Carregar todos os comentários
+        async function loadAllComments() {
+            const resultDiv = document.getElementById('deleteResult');
+            const commentsListDiv = document.getElementById('commentsList');
+            
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Carregando depoimentos...';
+            
+            try {
+                const response = await fetch(API_BASE_URL + '/comments.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ ${data.comments.length} depoimentos carregados`;
+                    
+                    // Exibir comentários
+                    if (data.comments.length > 0) {
+                        let commentsHTML = '';
+                        data.comments.forEach(comment => {
+                            commentsHTML += `
+                                <div class="comment-item">
+                                    <div class="comment-header">
+                                        <span class="comment-author">${comment.name}</span>
+                                        <span class="comment-date">${new Date(comment.created_at).toLocaleString('pt-BR')}</span>
+                                    </div>
+                                    <div class="comment-text">${comment.message}</div>
+                                    <div class="comment-actions">
+                                        <button onclick="deleteComment(${comment.id})" class="btn btn-danger btn-small">
+                                            <i class="fas fa-trash"></i> Deletar
+                                        </button>
+                                        <span style="color: #6c757d; font-size: 0.8rem;">
+                                            ID: ${comment.id} | Rating: ${comment.rating}/5
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        commentsListDiv.innerHTML = commentsHTML;
+                    } else {
+                        commentsListDiv.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">Nenhum depoimento encontrado</p>';
+                    }
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erro: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro: ${error.message}`;
+            }
+        }
+
+        // Deletar comentário específico
+        async function deleteComment(commentId) {
+            const user = checkLocalStorage();
+            
+            if (!user) {
+                alert('❌ Nenhum usuário logado');
+                return;
+            }
+            
+            if (!confirm(`Tem certeza que deseja deletar o comentário ID: ${commentId}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(API_BASE_URL + '/delete_comment.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        id: commentId,
+                        user_id: user.id 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`✅ ${data.message}`);
+                    loadAllComments(); // Recarregar lista
+                } else {
+                    alert(`❌ Erro: ${data.error}`);
+                }
+            } catch (error) {
+                alert(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        // Testar deletar comentário
+        async function testDeleteComment() {
+            const user = checkLocalStorage();
+            const resultDiv = document.getElementById('deleteResult');
+            
+            if (!user) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Nenhum usuário logado';
+                return;
+            }
+            
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Testando deleção de comentário...';
+            
+            try {
+                // Primeiro, vamos listar os comentários
+                const listResponse = await fetch(API_BASE_URL + '/comments.php');
+                const listData = await listResponse.json();
+                
+                if (listData.success && listData.comments.length > 0) {
+                    const firstComment = listData.comments[0];
+                    resultDiv.textContent = `Testando deletar comentário ID: ${firstComment.id}`;
+                    
+                    const deleteResponse = await fetch(API_BASE_URL + '/delete_comment.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            id: firstComment.id,
+                            user_id: user.id 
+                        })
+                    });
+                    
+                    const deleteData = await deleteResponse.json();
+                    
+                    if (deleteData.success) {
+                        resultDiv.className = 'result success';
+                        resultDiv.textContent = `✅ ${deleteData.message}`;
+                    } else {
+                        resultDiv.className = 'result error';
+                        resultDiv.textContent = `❌ Erro ao deletar: ${deleteData.error}`;
+                    }
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ Nenhum comentário encontrado para testar';
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erro: ${error.message}`;
+            }
+        }
+
+        // Mostrar status atual
+        function showCurrentStatus() {
+            const user = checkLocalStorage();
+            const resultDiv = document.getElementById('statusResult');
+            
+            if (user) {
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Usuário logado:\n${JSON.stringify(user, null, 2)}`;
+            } else {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Nenhum usuário logado';
+            }
+        }
+
+        // Limpar localStorage
+        function clearLocalStorage() {
+            localStorage.removeItem('sitejv_user');
+            currentUser = null;
+            const resultDiv = document.getElementById('statusResult');
+            resultDiv.className = 'result warning';
+            resultDiv.textContent = '⚠️ Cache limpo com sucesso';
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshStats();
+            showCurrentStatus();
+        });
+    </script>
+</body>
+</html> 

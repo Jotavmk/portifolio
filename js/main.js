@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const commentsResponse = await getComments();
                     console.log('Comments updated:', commentsResponse);
                     if (commentsResponse.success) {
-                        renderComments(commentsResponse.comments);
+                        await renderComments(commentsResponse.comments);
                     }
                 } else {
                     alert('Erro ao enviar comentário: ' + response.error);

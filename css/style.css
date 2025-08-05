@@ -2130,3 +2130,241 @@ body {
         margin-left: 0.5rem;
     }
 }
+
+/* Delete Comment Button Styles */
+.delete-comment-btn {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.delete-comment-btn:hover {
+    background: rgba(231, 76, 60, 0.1);
+    color: #c0392b;
+    transform: scale(1.1);
+}
+
+.delete-comment-btn:active {
+    transform: scale(0.95);
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-white);
+    color: var(--primary-black);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease;
+    border-left: 4px solid;
+}
+
+.notification-success {
+    border-left-color: #27ae60;
+}
+
+.notification-error {
+    border-left-color: #e74c3c;
+}
+
+.notification-info {
+    border-left-color: #3498db;
+}
+
+.notification i:first-child {
+    font-size: 1.2rem;
+}
+
+.notification-success i:first-child {
+    color: #27ae60;
+}
+
+.notification-error i:first-child {
+    color: #e74c3c;
+}
+
+.notification-info i:first-child {
+    color: #3498db;
+}
+
+.notification span {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.close-notification {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.close-notification:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--primary-black);
+}
+
+/* Update comment footer to accommodate delete button */
+.comment-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.comment-date {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Login Section Styles */
+.login-section {
+    background: var(--primary-white);
+    padding: 5rem 0;
+}
+
+.login-content {
+    display: flex;
+    gap: 4rem;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.login-form {
+    flex: 1;
+    background: var(--primary-white);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.login-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--primary-black);
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--primary-white);
+    color: var(--primary-black);
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--primary-black);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.login-form .btn-primary {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-black);
+    color: var(--primary-white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login-form .btn-primary:hover {
+    background: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-info {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.login-info h3 {
+    color: var(--primary-black);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.login-info p {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.login-info strong {
+    color: var(--primary-black);
+}
+
+.login-info em {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+/* Responsive Login */
+@media (max-width: 768px) {
+    .login-content {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .login-form,
+    .login-info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-section {
+        padding: 3rem 0;
+    }
+    
+    .login-form {
+        padding: 1.5rem;
+    }
+    
+    .login-info {
+        padding: 1.5rem;
+    }
+}
